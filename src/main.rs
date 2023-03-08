@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use std::env::args;
-use std::process::{Command, Stdio};
+use std::process::{exit, Command, Stdio};
 
 // Usage: your_docker.sh run <image> <command> <arg1> <arg2> ...
 fn main() -> Result<()> {
@@ -17,6 +17,6 @@ fn main() -> Result<()> {
                 command, command_args
             )
         })?;
-    child.wait()?;
-    Ok(())
+    let exit_code = child.wait()?.code().unwrap_or(1);
+    exit(exit_code);
 }
